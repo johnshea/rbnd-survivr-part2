@@ -17,13 +17,15 @@ class Jury
       end
     end
 
+    puts
+    puts "The winner is #{current_winner.to_s.capitalize}!"
     return current_winner
 
   end
 
   def report_votes(final_votes)
     final_votes.each do |k, v|
-      puts "#{k} got #{v} votes"
+      puts "#{k.to_s.capitalize} received #{v} votes."
     end
   end
 
@@ -34,7 +36,7 @@ class Jury
 
     @members.each do |member|
       random_finalist = @finalists.keys.sample
-      puts "#{random_finalist} gets 1 vote"
+      puts "#{member.to_s.capitalize} cast their vote for #{random_finalist.to_s.capitalize}."
       @finalists[random_finalist] += 1
     end
 
