@@ -18,14 +18,15 @@ require "colorizr"
 @borneo = Game.new(@coyopa, @hunapu)
 #=========================================================
 
+NUM_ELIMINATIONS_IN_PHASE_ONE = 8
+NUM_ELIMINATIONS_IN_PHASE_TWO = 3
+NUM_ELIMINATIONS_IN_PHASE_THREE = 7
 
 #This is where you will write your code for the three phases
 def phase_one
   number_of_eliminations = 0
-  # puts
-  # puts "Phase One"
-  8.times do
 
+  NUM_ELIMINATIONS_IN_PHASE_ONE.times do
     tribe_without_immunity = nil
     immune_contestant = nil
     voted_off_contestant = nil
@@ -42,16 +43,11 @@ def phase_one
 
     puts "Tribe #{tribe_with_immunity.to_s.green} has won the immunity challenge so Tribe #{tribe_without_immunity.to_s.green} is voting someone off tonight."
 
-    # puts "(START) Immune tribe: #{tribe_with_immunity.members.length}"
-    # puts "(START) Voted off tribe: #{tribe_without_immunity.members.length}"
-
     immune_contestant = tribe_without_immunity.members.sample
     voted_off_contestant = tribe_without_immunity.tribal_council({immune: immune_contestant})
     puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island."
     puts
 
-    # puts "(END) Immune tribe: #{tribe_with_immunity.members.length}"
-    # puts "(END) Voted off tribe: #{tribe_without_immunity.members.length}"
     @borneo.clear_tribes
     @borneo.add_tribe tribe_with_immunity
     @borneo.add_tribe tribe_without_immunity
@@ -59,27 +55,16 @@ def phase_one
 
   end
 
-  # tribes = @borneo.tribes
-  # puts "Survivors: #{tribes[0].members.length} #{tribes[0].members}"
-  # puts "Survivors: #{tribes[1].members.length} #{tribes[1].members}"
   number_of_eliminations
 end
 
 def phase_two
-  # phase_one
-  # @merge_tribe = @borneo.merge("Cello")
-  # puts
-  # puts "Phase Two *************************************************"
-  # puts "Merged tribe size: #{@merge_tribe.members.length}"
 
   number_of_eliminations = 0
 
-  3.times do
+  NUM_ELIMINATIONS_IN_PHASE_TWO.times do
     immune_contestant = nil
     voted_off_contestant = nil
-
-    # immune_contestant = @merge_tribe.members.sample
-    # voted_off_contestant = @merge_tribe.tribal_council({immune: immune_contestant})
 
     immune_contestant = @borneo.individual_immunity_challenge
     puts "#{immune_contestant.to_s.capitalize.yellow} won the individual immunity challenge and is safe from elimination."
@@ -89,33 +74,33 @@ def phase_two
 
     number_of_eliminations += 1
   end
-  # puts "Merged tribe size: #{@merge_tribe.members.length} left"
+
   number_of_eliminations
 end
 
-def phase_three
-  # puts
-  # puts "Phase Three *************************************************"
-  # puts "Merged tribe size: #{@merge_tribe.members.length}"
+def display_remaining_tribe_members(tribe)
+  tribe.members.each_with_index do |member, i|
+    name = member.name.capitalize.pink
+    print name + ', ' if i < tribe.members.length - 1
+    puts name if i == tribe.members.length - 1
+  end
+end
 
-  7.times do |i|
+def phase_three
+
+  NUM_ELIMINATIONS_IN_PHASE_THREE.times do |i|
     immune_contestant = @merge_tribe.members.sample
     voted_off_contestant = @merge_tribe.tribal_council({immune: immune_contestant})
-    puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island."
-    @jury.add_member voted_off_contestant
-    print "Remaining tribemates on #{"Cello".green} are: "
-    @merge_tribe.members.each_with_index do |member, i|
-      if i == @merge_tribe.members.length - 1
-        puts member.name.capitalize.pink
-      else
-        print member.name.capitalize.pink + ', '
-      end
-    end
-    puts "#{voted_off_contestant.to_s.capitalize.yellow} is member #{i+1} of the jury."
-    puts
 
+    puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island and is member #{i+1} of the jury."
+    @jury.add_member voted_off_contestant
+
+    print "Remaining tribemates on #{"Cello".green} are: "
+    display_remaining_tribe_members @merge_tribe
+
+    puts
   end
-  # puts "Jury is: #{@jury.members}"
+
   @jury.members.length
 end
 
