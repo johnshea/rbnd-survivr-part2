@@ -1,10 +1,8 @@
 class Game
   attr_reader :tribes
 
-  def initialize(tribe_one, tribe_two)
-    @tribes = Array.new
-    @tribes.push tribe_one
-    @tribes.push tribe_two
+  def initialize(*tribes)
+    @tribes = tribes
   end
 
   def add_tribe(tribe)

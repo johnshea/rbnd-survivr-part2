@@ -7,15 +7,7 @@ class Jury
 
   def announce_winner(final_votes)
     current_highest_vote_count = 0
-    winner = nil
-
-    final_votes.each do |key, value|
-      if value > current_highest_vote_count
-        current_highest_vote_count = value
-        winner = key
-      end
-    end
-
+    winner = final_votes.max_by { |k, v| v }.flatten[0]
     puts
     puts "The winner is #{winner.to_s.capitalize.green}!"
     return winner

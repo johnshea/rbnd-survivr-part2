@@ -13,10 +13,9 @@ class Tribe
 
   def tribal_council(options)
     @immune = options[:immune]
-    @members.each_with_index do |member, index|
-      if member != @immune
-        return @members.delete_at(index)
-      end
-    end
+    array_of_not_immune_members = @members.reject { |member| member == @immune}
+    eliminated_member = array_of_not_immune_members.sample
+    @members.delete eliminated_member
+    return eliminated_member
   end
 end
