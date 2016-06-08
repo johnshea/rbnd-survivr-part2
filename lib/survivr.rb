@@ -24,43 +24,21 @@ NUM_ELIMINATIONS_IN_PHASE_THREE = 7
 
 #This is where you will write your code for the three phases
 def phase_one
-  number_of_eliminations = 0
 
   NUM_ELIMINATIONS_IN_PHASE_ONE.times do
-    tribe_without_immunity = nil
-    immune_contestant = nil
-    voted_off_contestant = nil
 
-    tribes = @borneo.tribes
+    tribe_without_immunity = @borneo.immunity_challenge
 
-    tribe_with_immunity = @borneo.immunity_challenge
+    puts "Tribe #{tribe_without_immunity.to_s.green} lost the immunity challenge so they are voting someone off tonight."
 
-    if tribe_with_immunity == tribes[0]
-      tribe_without_immunity = tribes[1]
-    else
-      tribe_without_immunity = tribes[0]
-    end
-
-    puts "Tribe #{tribe_with_immunity.to_s.green} has won the immunity challenge so Tribe #{tribe_without_immunity.to_s.green} is voting someone off tonight."
-
-    immune_contestant = tribe_without_immunity.members.sample
-    voted_off_contestant = tribe_without_immunity.tribal_council({immune: immune_contestant})
+    voted_off_contestant = tribe_without_immunity.tribal_council
     puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island."
     puts
 
-    @borneo.clear_tribes
-    @borneo.add_tribe tribe_with_immunity
-    @borneo.add_tribe tribe_without_immunity
-    number_of_eliminations += 1
-
   end
-
-  number_of_eliminations
 end
 
 def phase_two
-
-  number_of_eliminations = 0
 
   NUM_ELIMINATIONS_IN_PHASE_TWO.times do
     immune_contestant = nil
@@ -72,10 +50,7 @@ def phase_two
     puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island."
     puts
 
-    number_of_eliminations += 1
   end
-
-  number_of_eliminations
 end
 
 def display_remaining_tribe_members(tribe)
@@ -89,7 +64,7 @@ end
 def phase_three
 
   NUM_ELIMINATIONS_IN_PHASE_THREE.times do |i|
-    immune_contestant = @merge_tribe.members.sample
+    immune_contestant = @borneo.individual_immunity_challenge
     voted_off_contestant = @merge_tribe.tribal_council({immune: immune_contestant})
 
     puts "#{voted_off_contestant.to_s.capitalize.red} was voted off the island and is member #{i+1} of the jury."
@@ -101,7 +76,6 @@ def phase_three
     puts
   end
 
-  @jury.members.length
 end
 
 

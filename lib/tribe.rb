@@ -11,7 +11,7 @@ class Tribe
     @name
   end
 
-  def tribal_council(options)
+  def tribal_council(options={})
     @immune = options[:immune]
     array_of_not_immune_members = @members.reject { |member| member == @immune}
     eliminated_member = array_of_not_immune_members.sample
